@@ -1,13 +1,8 @@
 name: Update Mesonet Data
 
-# Runs every 5 minutes, matching Kentucky Mesonet's own update cadence
-# - no benefit polling faster than the source itself refreshes.
-# Deliberately offset off the round-number marks (:03, :08, :13...
-# instead of :00, :05, :10...) - see the comment on the cron line
-# below. GitHub's actual schedule timing can still lag a few minutes
-# under load even offset; that's fine here, this data is only ever
-# "roughly" 5 minutes old either way, same as it was fetched live
-# before this existed.
+# Runs every 3 minutes - no benefit polling faster than the source
+# itself refreshes, but tighter than the mirror's original 5-minute
+# cadence.
 #
 # Rehosts Kentucky Mesonet's camera images and current-conditions data
 # per their own stated condition for reuse (Dr. Jerry Brotzge,
@@ -16,7 +11,7 @@ name: Update Mesonet Data
 # raw.githubusercontent.com.
 on:
   schedule:
-    - cron: '3,8,13,18,23,28,33,38,43,48,53,58 * * * *' # same 5-minute cadence as '*/5 * * * *', but offset off the round-number marks (:00, :05, :10...) - GitHub's own docs warn scheduled workflows get delayed most right at those exact boundaries, since that's when every other repo's plain */5 schedule also fires and the shared queue gets slammed. Real, observed cause: this workflow sat with zero scheduled runs for 20+ minutes on the unoffset schedule despite a clean, correctly-parsed YAML file.
+    - cron: '*/3 * * * *' # every 3 minutes - will still periodically land on :00 (the single worst top-of-hour congestion mark per GitHub's own docs) since 3 doesn't evenly avoid it the way a 5-minute-offset schedule could, but that's an acceptable tradeoff for the tighter interval actually asked for here.
   workflow_dispatch: # lets you trigger a run manually from the Actions tab in GitHub's web UI, useful for testing without waiting on the schedule
 
 jobs:
