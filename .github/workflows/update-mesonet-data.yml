@@ -15,7 +15,7 @@ name: Update Mesonet Data
 # raw.githubusercontent.com.
 on:
   schedule:
-    - cron: '*/15 * * * *' # 15 minutes is GitHub's actual documented minimum for scheduled workflows - anything shorter gets silently dropped rather than run, which is what was actually happening at 3 and 5 minute intervals, not a lag/congestion issue as previously assumed.
+    - cron: '*/18 * * * *' # 15 minutes is GitHub's actual documented minimum for scheduled workflows - anything shorter gets silently dropped rather than run, which is what was actually happening at 3 and 5 minute intervals, not a lag/congestion issue as previously assumed.
   workflow_dispatch: # lets you trigger a run manually from the Actions tab in GitHub's web UI, useful for testing without waiting on the schedule
 
 jobs:
