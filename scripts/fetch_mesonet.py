@@ -16,6 +16,7 @@ own rehosted mirror of it.
 Zero third-party dependencies on purpose (stdlib only) - keeps the
 GitHub Actions job fast and needing no pip install step.
 """
+import gzip
 import json
 import os
 import urllib.request
@@ -45,12 +46,30 @@ OUT_DIR = "data"
 USER_AGENT = "KYStateProBaiter-DataSync/1.0 (+https://github.com/oldmanbombin/MesonetMirror)"
 
 
+def _maybe_decompress(raw: bytes) -> bytes:
+    """CloudFront (and some other CDNs) can serve gzip-compressed
+    content even without a client explicitly requesting it - unlike
+    the third-party `requests` library, Python's built-in urllib
+    never auto-decompresses, so a raw gzip body handed straight to
+    json.loads() or saved as an "image" blows up or produces garbage.
+    Detected here by checking for gzip's own magic number (0x1f 0x8b)
+    directly on the raw bytes, rather than trusting the
+    Content-Encoding response header, since that's not always set
+    correctly by every CDN configuration. JPEGs (0xFF 0xD8) and plain
+    JSON text never start with these bytes, so this is safe to apply
+    unconditionally to both fetch_json() and fetch_bytes()."""
+    if len(raw) >= 2 and raw[0] == 0x1F and raw[1] == 0x8B:
+        return gzip.decompress(raw)
+    return raw
+
+
 def fetch_json(url: str):
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "application/json"})
     try:
         with urllib.request.urlopen(req, timeout=20) as resp:
-            return json.loads(resp.read().decode("utf-8"))
-    except (urllib.error.URLError, urllib.error.HTTPError, json.JSONDecodeError) as e:
+            raw = _maybe_decompress(resp.read())
+            return json.loads(raw.decode("utf-8"))
+    except (urllib.error.URLError, urllib.error.HTTPError, json.JSONDecodeError, OSError) as e:
         print(f"  FAILED: {url} - {e}")
         return None
 
@@ -59,8 +78,8 @@ def fetch_bytes(url: str):
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     try:
         with urllib.request.urlopen(req, timeout=20) as resp:
-            return resp.read()
-    except (urllib.error.URLError, urllib.error.HTTPError) as e:
+            return _maybe_decompress(resp.read())
+    except (urllib.error.URLError, urllib.error.HTTPError, OSError) as e:
         print(f"  FAILED: {url} - {e}")
         return None
 
