@@ -1,8 +1,12 @@
 name: Update Mesonet Data
 
-# Runs every 3 minutes - no benefit polling faster than the source
-# itself refreshes, but tighter than the mirror's original 5-minute
-# cadence.
+# Runs every 15 minutes - GitHub's actual documented minimum interval
+# for scheduled workflows. Anything more frequent (3 min and 5 min
+# were both tried) gets silently dropped rather than run - that was
+# the real, confirmed cause of zero scheduled runs ever firing, not
+# scheduler lag or congestion at round-number marks as previously
+# assumed. This data is "roughly" 15 minutes old at worst, same
+# honest tradeoff as any free-tier scheduled job.
 #
 # Rehosts Kentucky Mesonet's camera images and current-conditions data
 # per their own stated condition for reuse (Dr. Jerry Brotzge,
@@ -11,7 +15,7 @@ name: Update Mesonet Data
 # raw.githubusercontent.com.
 on:
   schedule:
-    - cron: '*/3 * * * *' # every 3 minutes - will still periodically land on :00 (the single worst top-of-hour congestion mark per GitHub's own docs) since 3 doesn't evenly avoid it the way a 5-minute-offset schedule could, but that's an acceptable tradeoff for the tighter interval actually asked for here.
+    - cron: '*/15 * * * *' # 15 minutes is GitHub's actual documented minimum for scheduled workflows - anything shorter gets silently dropped rather than run, which is what was actually happening at 3 and 5 minute intervals, not a lag/congestion issue as previously assumed.
   workflow_dispatch: # lets you trigger a run manually from the Actions tab in GitHub's web UI, useful for testing without waiting on the schedule
 
 jobs:
