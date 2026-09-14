@@ -1,0 +1,70 @@
+name: Update Mesonet Data
+
+# Runs every 5 minutes, matching Kentucky Mesonet's own update cadence
+# - no benefit polling faster than the source itself refreshes.
+# GitHub's actual schedule timing can lag a few minutes under load;
+# that's fine here, this data is only ever "roughly" 5 minutes old
+# either way, same as it was fetched live before this existed.
+#
+# Rehosts Kentucky Mesonet's camera images and current-conditions data
+# per their own stated condition for reuse (Dr. Jerry Brotzge,
+# Programs Director) - the app itself must never call Mesonet's own
+# CDN or API directly, only this repo's own mirror of it, served via
+# raw.githubusercontent.com.
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch: # lets you trigger a run manually from the Actions tab in GitHub's web UI, useful for testing without waiting on the schedule
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out fetch script (from the default branch)
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            scripts/fetch_mesonet.py
+          sparse-checkout-cone-mode: false
+
+      - name: Seed working directory from the previous snapshot, if one exists
+        # Keeps a single station's transient fetch failure from
+        # causing a temporary 404 on its image/data - the script below
+        # only overwrites files it successfully fetches this run,
+        # leaving everything else exactly as the last successful run
+        # left it. On the very first run ever, the mesonet-data branch
+        # doesn't exist yet - the "|| true" lets that fail quietly
+        # instead of failing the whole job.
+        run: |
+          mkdir -p data
+          git clone --depth 1 --branch mesonet-data https://github.com/${{ github.repository }}.git prev 2>/dev/null && cp -r prev/. data/ && rm -rf data/.git prev || true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run fetch script
+        run: python3 scripts/fetch_mesonet.py
+
+      - name: Commit and force-push as a single fresh commit
+        # Deliberately NOT a normal incremental commit history - this
+        # branch would otherwise grow by one commit's worth of image
+        # diffs every 5 minutes forever (over 100,000 commits/year),
+        # which would bloat the repo for no benefit, since nobody
+        # needs to look back at what a camera image looked like three
+        # weeks ago. Wiping .git and reinitializing fresh each run
+        # means the branch is always exactly one commit - the current
+        # snapshot, nothing more - regardless of how long this has
+        # been running.
+        run: |
+          cd data
+          rm -rf .git
+          git init -q
+          git checkout -q -b mesonet-data
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Mesonet data snapshot $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          git push -q --force origin mesonet-data
