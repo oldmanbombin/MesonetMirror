@@ -111,9 +111,31 @@ def main() -> None:
     }
 
     print("Fetching camera manifest...")
-    camera_manifest = fetch_json(CAMERA_MANIFEST_URL) or {}
+    # Cache-busting query param - real suspected cause of images
+    # appearing "frozen" across multiple workflow runs despite fresh
+    # commits each time: d266k7wxhw6o23.cloudfront.net (Mesonet's own
+    # CDN, not ours) may be caching this exact URL for longer than our
+    # 5-minute polling interval, in which case every run within that
+    # window gets back the SAME stale filename from THEM, and we
+    # legitimately re-download and re-commit the same unchanged image
+    # - not a bug in our own overwrite logic, but worth ruling out
+    # empirically rather than assuming. Appending a changing query
+    # string is the standard way to bypass a CDN cache when the cache
+    # key includes the query string (not guaranteed to work on every
+    # CDN config, but low-risk to try).
+    cache_bust_url = f"{CAMERA_MANIFEST_URL}?_cb={int(datetime.now(timezone.utc).timestamp())}"
+    camera_manifest = fetch_json(cache_bust_url) or {}
     if not camera_manifest:
         print("WARNING: camera manifest fetch failed or returned nothing - camera images will be skipped this run, previous images (from the last successful run) stay live since we only overwrite what we successfully fetch.")
+    else:
+        # Diagnostic: print what Mesonet's OWN manifest actually says
+        # for a couple of stations, every run - lets us directly
+        # confirm from the Actions log whether their filename/
+        # timestamp is really advancing between runs, or whether we're
+        # legitimately just being handed the same stale answer.
+        for probe_station in ("BAND", "LGRN", "WDBY"):
+            probe_info = camera_manifest.get(probe_station)
+            print(f"  [DIAG] Mesonet's own manifest for {probe_station}: {probe_info}")
 
     for station in STATIONS:
         print(f"Station {station}:")
@@ -133,7 +155,8 @@ def main() -> None:
         else:
             print("  no camera entry in manifest for this station")
 
-        current = fetch_json(CURRENT_URL_TEMPLATE.format(station=station))
+        current_url = CURRENT_URL_TEMPLATE.format(station=station) + f"?_cb={int(datetime.now(timezone.utc).timestamp())}"
+        current = fetch_json(current_url)
         if current:
             with open(f"{OUT_DIR}/current/{station}.json", "w") as f:
                 json.dump(current, f)
