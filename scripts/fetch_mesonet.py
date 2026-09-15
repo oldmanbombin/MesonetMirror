@@ -43,6 +43,20 @@ CAMERA_BASE_URL = "https://d266k7wxhw6o23.cloudfront.net/"
 CURRENT_URL_TEMPLATE = "https://www.kymesonet.org/api/data/current/{station}"
 
 OUT_DIR = "data"
+
+# The ONE place this interval lives. Update this whenever the cron
+# schedule on the VM changes - the app itself reads this value out of
+# manifest.json at runtime (see get_update_interval_seconds() in
+# autoload/mesonet_manifest.gd) rather than having its own hardcoded
+# guess baked into the Godot build. That's the actual fix for a real
+# problem: this interval changed three times in one session (5 min,
+# 12 min, 10 min) and the app's own auto-refresh timer, previously a
+# separate hardcoded constant in site_detail.gd, never once followed
+# along - a full app rebuild and reinstall would have been needed
+# every time just to keep the two in sync. Now there's only one place
+# to edit, and it takes effect the next time the mirror runs, no app
+# rebuild required.
+UPDATE_INTERVAL_SECONDS = 600
 USER_AGENT = "KYStateProBaiter-DataSync/1.0 (+https://github.com/oldmanbombin/MesonetMirror)"
 
 
@@ -107,6 +121,7 @@ def main() -> None:
 
     manifest = {
         "generated_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "update_interval_seconds": UPDATE_INTERVAL_SECONDS,
         "stations": {},
     }
 
