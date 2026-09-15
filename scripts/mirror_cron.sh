@@ -19,7 +19,7 @@
 #   - python3 and git need to be installed on the VM
 
 set -euo pipefail
-cd "$(dirname "${BASH_SOURCE[0]}")"
+cd "$(dirname "${BASH_SOURCE[0]}")/.." # this script lives in scripts/, but every path below (data/, scripts/fetch_mesonet.py) is written relative to the repo root - go up one level to actually land there
 
 REPO="oldmanbombin/MesonetMirror"
 BRANCH="mesonet-data"
