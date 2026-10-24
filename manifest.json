@@ -1,0 +1,260 @@
+{
+  "generated_utc": "2026-10-24T13:08:13Z",
+  "stations": {
+    "ALBN": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846980
+    },
+    "BAND": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846800
+    },
+    "BLOM": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846800
+    },
+    "BLRK": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846980
+    },
+    "BMTN": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846800
+    },
+    "BNGL": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792847340
+    },
+    "BNVL": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792847040
+    },
+    "BTCK": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846800
+    },
+    "CCLA": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846800
+    },
+    "CHTR": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846920
+    },
+    "CMBA": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846920
+    },
+    "CRMT": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846800
+    },
+    "CROP": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792847040
+    },
+    "DABN": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846860
+    },
+    "DORT": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846980
+    },
+    "DRFN": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846920
+    },
+    "ERLN": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846800
+    },
+    "EWPK": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846800
+    },
+    "FCHV": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846980
+    },
+    "FLRK": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846980
+    },
+    "GRDR": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846920
+    },
+    "GRHM": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792847040
+    },
+    "HARD": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846860
+    },
+    "HCKM": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792847160
+    },
+    "HHTS": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846980
+    },
+    "HRDB": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792847040
+    },
+    "HTFD": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846920
+    },
+    "HUEY": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846860
+    },
+    "LGNT": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846920
+    },
+    "LGRN": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792847100
+    },
+    "LNDN": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792847040
+    },
+    "LSML": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792847100
+    },
+    "LUSA": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846860
+    },
+    "LXGN": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846920
+    },
+    "MONT": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792847040
+    },
+    "MRHD": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846920
+    },
+    "MROK": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846920
+    },
+    "MRRY": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792847040
+    },
+    "PRST": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846800
+    },
+    "PVRT": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846860
+    },
+    "RBSN": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846980
+    },
+    "RFSM": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846800
+    },
+    "RPTN": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846860
+    },
+    "RSVL": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792847040
+    },
+    "STAN": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792847160
+    },
+    "SWON": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846980
+    },
+    "VEST": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792847040
+    },
+    "WDBY": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846920
+    },
+    "WNCH": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792847040
+    },
+    "WSHT": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792847100
+    },
+    "ZION": {
+      "has_camera": true,
+      "has_current": true,
+      "camera_timestamp_epoch": 1792846800
+    }
+  }
+}
